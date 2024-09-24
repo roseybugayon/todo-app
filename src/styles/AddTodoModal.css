@@ -1,0 +1,185 @@
+.addTodoModal {
+  width: 710px;
+  height: 283px;
+  background-color: white;
+  top: 50%;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modalContent h2 {
+  font-weight: bold;
+  color: var(--main-font-color);
+  margin-bottom: 0.75rem;
+}
+
+.addTodoForm {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  color: var(--main-font-color);
+}
+
+.addTodoForm label {
+  display: flex;
+  flex-direction: column;
+}
+
+.addTodoForm label input {
+  height: 33px;
+  border: 1px solid var(--main-font-color);
+  border-radius: 6px;
+  padding-left: 0.5rem;
+  font-family: "Lato", sans-serif;
+  color: black;
+  margin-top: 0.25rem;
+}
+
+.bottomInputs {
+  display: flex;
+  margin-top: 0.5rem;
+  gap: 2rem;
+}
+
+.bottomInputs ul {
+  display: flex;
+  width: 200px;
+  gap: 1rem;
+  padding-left: 0px;
+  margin: 0;
+  margin-top: 0.5rem;
+}
+
+.bottomInputs li {
+  margin: 0;
+}
+
+.date {
+  border: 1px solid var(--main-font-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  width: 140px;
+  height: 33px;
+  padding: 0 0.5rem;
+  font-size: 16px;
+  border-radius: 6px;
+  color: black;
+  margin-top: 0.25rem;
+}
+
+.closeCal:hover {
+  cursor: pointer;
+}
+
+.icons {
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dayPicker,
+.dayPickerDisabled {
+  height: 20px;
+  width: 20px;
+  padding: 0.25rem;
+  border-radius: 50%;
+}
+
+.dayPicker:hover {
+  cursor: pointer;
+  background-color: #d9dbdc;
+}
+
+.priority {
+  margin-left: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9px;
+  text-transform: uppercase;
+}
+
+.priority-low {
+  border: 1px solid #4fe3a3;
+  color: #4fe3a3;
+}
+
+.priority-medium {
+  border: 1px solid #f8a400;
+  color: #f8a400;
+}
+
+.priority-high {
+  border: 1px solid #f42d2d;
+  color: #f42d2d;
+}
+
+.priority-low:hover,
+.priority-low-selected {
+  background-color: #4fe3a3;
+}
+
+.priority-medium:hover,
+.priority-medium-selected {
+  background-color: #f8a400;
+}
+
+.priority-high:hover,
+.priority-high-selected {
+  background-color: #f42d2d;
+}
+
+.priority:hover,
+.priority-high-selected,
+.priority-low-selected,
+.priority-medium-selected {
+  cursor: pointer;
+  color: white !important;
+}
+
+.bottomBtns {
+  align-self: center;
+  width: 250px;
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.bottomBtns button {
+  width: 100px;
+  height: 35px;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.bottomBtns button:hover {
+  cursor: pointer;
+}
+
+.bottomBtns .cancel {
+  background-color: white;
+  border: 1px solid #cdcdd0;
+}
+
+.bottomBtns .cancel:hover {
+  background-color: rgb(235, 231, 231);
+}
+
+.bottomBtns .create {
+  background-color: #4690ff;
+  border: none;
+  color: white;
+}
+
+.bottomBtns .create:hover {
+  background-color: #2873e2;
+}
+
+.invalid {
+  border: 1px solid #f42d2d !important;
+}

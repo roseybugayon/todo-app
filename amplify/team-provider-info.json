@@ -10,6 +10,17 @@
       "StackName": "amplify-todoapp-dev-94870",
       "StackId": "arn:aws:cloudformation:us-west-1:869935095103:stack/amplify-todoapp-dev-94870/78a8f9a0-779f-11ef-b095-065ce34af205",
       "AmplifyAppId": "dxvomdd9njnd5"
+    },
+    "categories": {
+      "api": {
+        "todoapp": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dxvomdd9njnd5",
+          "type": "cicd"
+        }
+      }
     }
   }
 }

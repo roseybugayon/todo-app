@@ -8,4 +8,5 @@ type Todo @model {
   description: String!
   date: AWSDate
   priority: String
+  isCompleted: Boolean
 }

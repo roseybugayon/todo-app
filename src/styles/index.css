@@ -1,0 +1,20 @@
+:root {
+  --main-bg-color: #f4f4f5;
+  --main-font-color: #585761;
+  --accent-font-color: #666afa;
+}
+
+body {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--main-bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-weight: 500;
+}
