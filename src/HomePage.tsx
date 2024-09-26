@@ -70,9 +70,9 @@ export function HomePage() {
       return getPriorityValue(a.priority) - getPriorityValue(b.priority);
     });
     todoList.sort((a, b) => {
-      if (a.date == null) return 1;
-      if (b.date == null) return -1;
-      return b.date.localeCompare(a.date);
+      if (a.date == null) return -1;
+      if (b.date == null) return 1;
+      return a.date.localeCompare(b.date);
     });
 
     todoList.sort((a, b) => {
