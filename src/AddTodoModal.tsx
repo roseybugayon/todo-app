@@ -1,12 +1,11 @@
 import { generateClient } from "aws-amplify/api";
 import { format } from "date-fns";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiFillCloseCircle, AiOutlineCalendar } from "react-icons/ai";
 import Modal from "react-modal";
 import { v4 as uuidv4 } from "uuid";
-import { Todo } from "./API";
 import { createTodo } from "./graphql/mutations";
 import "./styles/AddTodoModal.css";
 
@@ -15,11 +14,12 @@ interface TodoDateProps {
   clear: () => void;
   handleDateChange: (event: any) => void;
   onClick?: () => void;
+  dateValid: boolean;
 }
 
 const TodoDate = forwardRef<HTMLDivElement, TodoDateProps>(
-  ({ formattedDate, clear, handleDateChange, onClick }, ref) => (
-    <div className="date" ref={ref}>
+  ({ formattedDate, dateValid, clear, handleDateChange, onClick }, ref) => (
+    <div className={`date ${!dateValid ? "invalid" : ""}`} ref={ref}>
       <p>{formattedDate}</p>
 
       <div className="icons">
@@ -70,7 +70,10 @@ export default function AddTodoModal(props: AddTodoModalProps) {
     format(new Date(), "MMM dd, yyyy")
   );
 
-  const [date, setDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
+  const [date, setDate] = useState<string | null | undefined>(
+    format(new Date(), "yyyy-MM-dd")
+  );
+  const [dateValid, setDateValid] = useState<boolean>(true);
   const [task, setTask] = useState<string | undefined>(undefined);
   const [taskValid, setTaskValid] = useState<boolean>(true);
   const [prioritySelected, setPrioritySelected] = useState<string>("");
@@ -91,6 +94,10 @@ export default function AddTodoModal(props: AddTodoModalProps) {
     setDate(format(event, "yyyy-MM-dd"));
   };
 
+  useEffect(() => {
+    console.log(date);
+  }, [date]);
+
   const validateTask = () => {
     if (task === "" || task == undefined) {
       setTaskValid(false);
@@ -107,12 +114,24 @@ export default function AddTodoModal(props: AddTodoModalProps) {
   const clear = () => {
     setDate("");
     setFormattedDate("");
+    setDateValid(false);
   };
+
+  function resetAndCloseModal() {
+    setTaskValid(true);
+    setPrioritySelected("");
+    setTask("");
+    setDate(format(new Date(), "yyyy-MM-dd"));
+    setDateValid(true);
+    closeModal();
+  }
 
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (task === "" || task == undefined) {
       setTaskValid(false);
+    } else if (date == null) {
+      setDateValid(false);
     } else {
       const result = await client.graphql({
         query: createTodo,
@@ -128,7 +147,7 @@ export default function AddTodoModal(props: AddTodoModalProps) {
 
       console.log(result);
       await fetchTodos();
-      closeModal();
+      resetAndCloseModal();
     }
   }
 
@@ -156,6 +175,7 @@ export default function AddTodoModal(props: AddTodoModalProps) {
                     formattedDate={formattedDate}
                     clear={clear}
                     handleDateChange={handleDateChange}
+                    dateValid={dateValid}
                   />
                 }
               />
@@ -164,17 +184,19 @@ export default function AddTodoModal(props: AddTodoModalProps) {
               Priority:
               <ul style={{ listStyleType: "none" }}>
                 <li
-                  className={`priority priority-low ${
-                    prioritySelected == "low" ? "priority-low-selected" : ""
+                  className={`prioritymodal prioritymodal-low ${
+                    prioritySelected == "low"
+                      ? "prioritymodal-low-selected"
+                      : ""
                   }`}
                   onClick={() => handlePriorityChange("low")}
                 >
                   LOW
                 </li>
                 <li
-                  className={`priority priority-medium ${
+                  className={`prioritymodal prioritymodal-medium ${
                     prioritySelected == "medium"
-                      ? "priority-medium-selected"
+                      ? "prioritymodal-medium-selected"
                       : ""
                   }`}
                   onClick={() => handlePriorityChange("medium")}
@@ -182,8 +204,10 @@ export default function AddTodoModal(props: AddTodoModalProps) {
                   MEDIUM
                 </li>
                 <li
-                  className={`priority priority-high ${
-                    prioritySelected == "high" ? "priority-high-selected" : ""
+                  className={`prioritymodal prioritymodal-high ${
+                    prioritySelected == "high"
+                      ? "prioritymodal-high-selected"
+                      : ""
                   }`}
                   onClick={() => handlePriorityChange("high")}
                 >
@@ -193,7 +217,7 @@ export default function AddTodoModal(props: AddTodoModalProps) {
             </label>
           </div>
           <div className="bottomBtns">
-            <button onClick={closeModal} className="cancel">
+            <button onClick={resetAndCloseModal} className="cancel">
               Cancel
             </button>
             <button type="submit" onClick={handleSubmit} className="create">

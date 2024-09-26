@@ -97,47 +97,47 @@
   background-color: #d9dbdc;
 }
 
-.priority {
+.prioritymodal {
   margin-left: 1rem;
   padding: 0.25rem 0.5rem;
   border-radius: 9px;
   text-transform: uppercase;
 }
 
-.priority-low {
+.prioritymodal-low {
   border: 1px solid #4fe3a3;
   color: #4fe3a3;
 }
 
-.priority-medium {
+.prioritymodal-medium {
   border: 1px solid #f8a400;
   color: #f8a400;
 }
 
-.priority-high {
+.prioritymodal-high {
   border: 1px solid #f42d2d;
   color: #f42d2d;
 }
 
-.priority-low:hover,
-.priority-low-selected {
+.prioritymodal-low:hover,
+.prioritymodal-low-selected {
   background-color: #4fe3a3;
 }
 
-.priority-medium:hover,
-.priority-medium-selected {
+.prioritymodal-medium:hover,
+.prioritymodal-medium-selected {
   background-color: #f8a400;
 }
 
-.priority-high:hover,
-.priority-high-selected {
+.prioritymodal-high:hover,
+.prioritymodal-high-selected {
   background-color: #f42d2d;
 }
 
-.priority:hover,
-.priority-high-selected,
-.priority-low-selected,
-.priority-medium-selected {
+.prioritymodal:hover,
+.prioritymodal-high-selected,
+.prioritymodal-low-selected,
+.prioritymodal-medium-selected {
   cursor: pointer;
   color: white !important;
 }

@@ -1,5 +1,5 @@
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AddTodoModal from "./AddTodoModal";
 import { Todo } from "./API";
 import plus from "./assets/Plus.png";
@@ -17,25 +17,35 @@ function TodoComponent({
   item: Todo;
   updateCompleted: (id: string) => void;
 }) {
+  const [formattedDate, setFormattedDate] = useState<string>("");
+
+  useMemo(() => {
+    if (item.date) {
+      setFormattedDate(getFormattedDate(item.date));
+    }
+  }, [item.date]);
+
   return (
     <div className="todoContainer" onClick={() => updateCompleted(item.id)}>
       <div className="checkAndTitle">
         <label className="checkboxContainer">
-          <input
-            type="checkbox"
-            defaultChecked={false}
-            checked={item.isCompleted ?? false}
-          />
+          <input type="checkbox" checked={item.isCompleted ?? false} />
           <span className="checkbox"></span>
         </label>
-        <p>{item.description}</p>
+        <p className={`${item.isCompleted ? "completed" : ""}`}>
+          {item.description}
+        </p>
         {item.priority && (
-          <div className={`priority priority-${item.priority}`}>
+          <div
+            className={`priority priority-${item.priority} ${
+              item.isCompleted ? "completed" : ""
+            }`}
+          >
             {item.priority}
           </div>
         )}
       </div>
-      <p>{getFormattedDate(item.date)}</p>
+      <p>{formattedDate && formattedDate}</p>
     </div>
   );
 }
@@ -44,14 +54,44 @@ export function HomePage() {
   const [todos, setTodos] = useState<Todo[] | undefined>(undefined);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
+  function sortTodos(todoList: Todo[]) {
+    const priorityOrder = ["high", "medium", "low"];
+
+    todoList.sort((a, b) => {
+      const getPriorityValue = (priority: string) => {
+        if (priority == null) return priorityOrder.length;
+        const index = priorityOrder.indexOf(priority);
+        return index === -1 ? priorityOrder.length : index;
+      };
+
+      if (a.priority == null) return 1;
+      if (b.priority == null) return -1;
+
+      return getPriorityValue(a.priority) - getPriorityValue(b.priority);
+    });
+    todoList.sort((a, b) => {
+      if (a.date == null) return 1;
+      if (b.date == null) return -1;
+      return b.date.localeCompare(a.date);
+    });
+
+    todoList.sort((a, b) => {
+      if (a.isCompleted && !b.isCompleted) return 1;
+      if (!a.isCompleted && b.isCompleted) return -1;
+      return 0;
+    });
+
+    setTodos(todoList);
+  }
+
   async function fetchTodos() {
     if (todos?.length != 0) {
       const result = await client.graphql({
         query: listTodos,
       });
 
-      setTodos(result.data.listTodos.items);
-      console.log(result);
+      const listOfTodos = result.data.listTodos.items;
+      sortTodos(listOfTodos);
     }
   }
 
@@ -62,7 +102,7 @@ export function HomePage() {
         item.id === id ? { ...item, isCompleted: !item.isCompleted } : item
       );
 
-      setTodos(updatedTodos);
+      sortTodos(updatedTodos);
 
       await client.graphql({
         query: updateTodo,
@@ -88,10 +128,10 @@ export function HomePage() {
   return (
     <div className="homePage">
       <h1>TODO App</h1>
-      <div className="addTodo" onClick={() => setIsAddModalOpen(true)}>
-        <img src={plus} alt="plus sign" />
-      </div>
       <div className="todoList">
+        <div className="addTodo" onClick={() => setIsAddModalOpen(true)}>
+          <img src={plus} alt="plus sign" />
+        </div>
         {todos &&
           todos.length > 0 &&
           todos.map((item) => {
